@@ -19,9 +19,10 @@ Permite gestionar productos (alta, baja, edición y listado) conectando con **Mo
 
 ## 👨‍💻 Equipo de desarrollo
 
-| Rol | Nombre | GitHub |
+| Rol | Nombre | Perfil |
 |-----|--------|--------|
-| Líder Técnico Backend | <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="16"/> [Diaz Cristian Ivan](https://github.com/cristiandcode) | Backend, Node.js, Express, MongoDB, API REST, pruebas en Postman |
+| Líder Técnico Backend | Diaz Cristian Ivan | <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="16"/> [GitHub](https://github.com/cristiandcode) &nbsp; <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="16"/> [LinkedIn](https://www.linkedin.com/in/cristiandcode/) |
+
 
 ---
 
