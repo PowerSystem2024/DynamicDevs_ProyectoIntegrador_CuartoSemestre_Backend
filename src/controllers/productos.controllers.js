@@ -32,7 +32,6 @@ export const obtenerProducto = async (req, res) => {
 
 export const crearProducto = async (req, res) => {
   try {
-    //Validar los datos del producto del body
     //Le pedimos a la BD crear el producto
     console.log(req.body);
     const productoNuevo = new Producto(req.body);
