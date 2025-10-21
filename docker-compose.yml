@@ -5,13 +5,13 @@ services:
     container_name: chocodevs-mongo
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "27018:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
     volumes:
       - mongo_data:/data/db
-      - ./docker/dump:/docker-entrypoint-initdb.d:ro
+      - ./docker/dump:/docker-entrypoint-initdb.d:ro,Z
 
   api:
     build:
