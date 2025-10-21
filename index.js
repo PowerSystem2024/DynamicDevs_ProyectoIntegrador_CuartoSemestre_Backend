@@ -5,6 +5,7 @@ import './src/database/database.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import productoRouter from './src/routes/productos.routes.js';
+import usuarioRouter from './src/routes/usuarios.routes.js';
 
 // 1- Configurar un puerto
 const app = express();
@@ -38,4 +39,5 @@ app.use(express.static(path.join(__dirname, '/public')))
 
 // })
 
+app.use('/api', usuarioRouter)
 app.use('/api', productoRouter)
