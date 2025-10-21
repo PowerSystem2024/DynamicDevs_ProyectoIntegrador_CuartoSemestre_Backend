@@ -41,6 +41,11 @@ app.use(express.static(path.join(__dirname, '/public')))
 
 // })
 
+// Healthcheck
+app.get('/healthz', (req, res) => {
+    res.status(200).json({ status: 'ok' })
+})
+
 app.use('/api', usuarioRouter)
 app.use('/api', productoRouter)
 app.use('/api', pedidosRouter)

@@ -1,0 +1,34 @@
+version: '3.9'
+services:
+  mongo:
+    image: mongo:6
+    container_name: chocodevs-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - mongo_data:/data/db
+      - ./docker/dump:/docker-entrypoint-initdb.d:ro
+
+  api:
+    build: .
+    container_name: chocodevs-api
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    environment:
+      PORT: 4001
+      MONGODB_URI: mongodb://root:root@mongo:27017/chocodevs?authSource=admin
+      JWT_SECRET: change_me_use_a_strong_secret
+      JWT_EXPIRES_IN: 7d
+      NODE_ENV: production
+    ports:
+      - "4001:4001"
+
+volumes:
+  mongo_data:
+
+

@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.vscode
+.env
+docker/dump/*
+!docker/dump/README.md
+!docker/dump/.gitkeep
+

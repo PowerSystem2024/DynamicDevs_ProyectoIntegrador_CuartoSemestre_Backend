@@ -141,3 +141,44 @@ Base de datos conectada
 Estoy escuchando el puerto 4001
 
 
+---
+
+## 🐳 Levantar con Docker
+
+Requisitos: Docker y Docker Compose.
+
+### 1) Variables de entorno
+Configura las variables en `docker-compose.yml` o usa un archivo `.env` externo si lo prefieres.
+
+### 2) Dump opcional de MongoDB (seed)
+- Colocar un dump en `docker/dump/` (ver `docker/dump/README.md`).
+- Este se restaurará automáticamente al iniciar el contenedor de MongoDB.
+- En entornos de producción, evitar montar `docker/dump/` para no sobrescribir datos.
+
+### 3) Levantar servicios
+```bash
+docker compose up -d --build
+```
+
+Servicios:
+- API: `http://localhost:4001`
+- Healthcheck: `GET http://localhost:4001/healthz` → `{ status: 'ok' }`
+- MongoDB: `mongodb://root:root@localhost:27017/chocodevs?authSource=admin`
+
+### 4) Ver logs
+```bash
+docker compose logs -f api
+```
+
+### 5) Restaurar manualmente un dump (alternativa)
+```bash
+docker exec -it chocodevs-mongo bash
+mongorestore --username root --password root --authenticationDatabase admin --db chocodevs /docker-entrypoint-initdb.d/chocodevs
+```
+
+### 6) Apagar servicios
+```bash
+docker compose down
+```
+
+
