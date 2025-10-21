@@ -14,7 +14,9 @@ services:
       - ./docker/dump:/docker-entrypoint-initdb.d:ro
 
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: dockerfile
     container_name: chocodevs-api
     restart: unless-stopped
     depends_on:
