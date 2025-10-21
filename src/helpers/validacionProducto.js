@@ -42,6 +42,14 @@ const validacionProducto = [
         .withMessage(
           "La descripcion breve debe tener entre 5 y 100 caracteres"
         ),
+         check("descripcion_amplia")
+        .not()
+        .notEmpty()
+        .withMessage("La descripcion amplia es un dato obligatorio")
+        .isLength({ min: 30, max: 500 })
+        .withMessage(
+          "La descripcion amplia debe tener entre 30 y 500 caracteres"
+        ),
   //Aquí llamo a  resultadoValidacion
   (req, res, next) => resultadoValidacion(req, res, next),
 ];
