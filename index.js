@@ -6,6 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import productoRouter from './src/routes/productos.routes.js';
 import usuarioRouter from './src/routes/usuarios.routes.js';
+import { autenticarJWT } from './src/middlewares/auth.middleware.js';
 
 // 1- Configurar un puerto
 const app = express();

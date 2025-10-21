@@ -50,6 +50,57 @@ Permite gestionar productos (alta, baja, edición y listado) conectando con **Mo
 - Logs de peticiones para monitoreo y debugging  
 - Pruebas de API y simulación de peticiones con **Postman**
 
+### 🔐 Autenticación y Autorización 
+- Registro de usuario con validación y cifrado de contraseña (bcrypt)
+- Login con generación de **JWT** (jsonwebtoken)
+- Middleware de autenticación para proteger rutas (por ejemplo, pedidos y pagos)
+
+---
+
+## 🔑 Configuración de variables de entorno
+
+Agrega al archivo `.env` las siguientes variables:
+
+```bash
+MONGODB_URI=<URI_MONGO>
+PORT=4001
+JWT_SECRET=<tu_secret_seguro>
+JWT_EXPIRES_IN=7d
+```
+
+---
+
+## 🛣️ Endpoints
+
+Base URL: `/api`
+
+### Usuarios
+- `POST /api/usuarios/register`
+  - Body: `{ nombre, apellido, email, password, rol? }`
+  - Respuestas:
+    - 201: `{ mensaje }`
+    - 409: `{ mensaje: "El email ya está registrado" }`
+- `POST /api/usuarios/login`
+  - Body: `{ email, password }`
+  - Respuestas:
+    - 200: `{ token, usuario }`
+    - 401: `{ mensaje: "Credenciales inválidas" }`
+
+### Productos
+- `GET /api/productos`
+- `POST /api/productos`
+- `GET /api/productos/:id`
+- `PUT /api/productos/:id`
+- `DELETE /api/productos/:id`
+
+---
+
+## 🛡️ Rutas protegidas por JWT
+
+Se debe enviar el encabezado `Authorization: Bearer <token>` en cada solicitud.
+
+Actualmente el proyecto ya expone el middleware `autenticarJWT` para usarse al montar estas rutas.
+
 ---
 
 ## 📫 Contacto
