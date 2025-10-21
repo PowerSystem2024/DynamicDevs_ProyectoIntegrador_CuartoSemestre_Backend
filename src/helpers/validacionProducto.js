@@ -34,6 +34,14 @@ const validacionProducto = [
         .withMessage(
           "La categoría debe ser una de las siguientes: (Infusiones, Batidos, Dulce, Salado, Sandwich)"
         ),
+         check("descripcion_breve")
+        .not()
+        .notEmpty()
+        .withMessage("La descripcion breve es un dato obligatorio")
+        .isLength({ min: 5, max: 100 })
+        .withMessage(
+          "La descripcion breve debe tener entre 5 y 100 caracteres"
+        ),
   //Aquí llamo a  resultadoValidacion
   (req, res, next) => resultadoValidacion(req, res, next),
 ];
