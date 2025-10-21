@@ -93,6 +93,20 @@ Base URL: `/api`
 - `PUT /api/productos/:id`
 - `DELETE /api/productos/:id`
 
+### Pedidos
+- `POST /api/pedidos` (JWT requerido)
+  - Body: `{ productos: [{ productoId, cantidad }], metodoPago }`
+  - Crea un pedido a partir del carrito del usuario autenticado.
+- `GET /api/pedidos/mios` (JWT requerido)
+  - Lista los pedidos del usuario autenticado.
+- `GET /api/pedidos` (JWT + rol ADMIN)
+  - Lista todos los pedidos (solo administradores).
+
+### Pagos (Webhook)
+- `POST /api/pagos/notificacion`
+  - Notificación de actualización de estado de pago de Mercado Pago.
+  - Recomendado validar firma/seguridad de la notificación (pendiente de integración).
+
 ---
 
 ## 🛡️ Rutas protegidas por JWT
