@@ -2,14 +2,15 @@
   "name": "proyecto4semestrebackend",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node --env-file .env index.js",
     "dev": "node --env-file .env --watch index.js"
   },
   "keywords": [],
-  "author": "Dynamic Devs",
+  "author": "dynamicDevs",
   "license": "ISC",
-  "description": "Backend ChocoDevs",
+  "description": "Backend chocodevs",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
