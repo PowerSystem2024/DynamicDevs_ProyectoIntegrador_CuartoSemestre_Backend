@@ -18,8 +18,8 @@ const productoSchema = new Schema({
         required: true,
         validate: {
             validator: (valor) =>{
-                const pattern = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/
-                return pattern.test(valor)
+                // const pattern = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/
+                 return /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/.test(valor);
             }
         }
     },

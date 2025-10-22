@@ -1,52 +1,35 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from 'mongoose';
 
-const usuarioSchema = new Schema({
-  nombre: {
-    type: String,
-    required: true,
-    unique: false
-  },
-  apellido: {
-    type: String,
-    required: true,
-    unique: false
-  },
+const usuarioSchema = new mongoose.Schema({
   email: {
     type: String,
-    required: true,
-    unique: true
+    trim: true,
+    require: true,
+    unique:true,
+    validate: {
+        validator: (value)=>{
+            const pattern = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
+            return pattern.test(value)
+        }
+    }
   },
   password: {
     type: String,
-    required: true,
-    minLength: 8
+    trim: true,
+    require: true,
+    validate:{
+        validator: (value)=>{
+            return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(value)
+        }
+    }
   },
-  rol: {
+  nombreUsuario: {
     type: String,
-    enum: ['ADMIN', 'CLIENTE'],
-    default: 'CLIENTE'
+    required: true,
+    minLength: 4,
+    maxLength: 15
   },
-  fechaRegistro: {
-    type: Date,
-    default: Date.now
-  }
 });
 
-const SALT_ROUNDS = 12;
-
-usuarioSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
-
-  try {
-    const salt = await bcrypt.genSalt(SALT_ROUNDS);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
-
-const Usuario = mongoose.model("usuario", usuarioSchema);
-export default Usuario;
+ const Usuario = mongoose.model('usuario', usuarioSchema);
+ export default Usuario;
