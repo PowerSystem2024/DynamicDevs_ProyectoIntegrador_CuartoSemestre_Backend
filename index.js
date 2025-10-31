@@ -1,32 +1,88 @@
-import express from 'express';
-import cors from 'cors';
-import morgan from 'morgan';
-import './src/database/database.js'; // Conectar con la base de datos
-import path from 'path';
-import { fileURLToPath } from 'url';
-import productoRouter from './src/routes/productos.routes.js';
-import usuarioRouter from './src/routes/usuarios.routes.js';
+import express from "express";
+import cors from "cors";
+import morgan from "morgan";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import "./src/database/database.js";
 
-// 1- Configurar un puerto
+// Routers
+import productoRouter from "./src/routes/productos.routes.js";
+import usuarioRouter from "./src/routes/usuarios.routes.js";
+import pagoRouter from "./src/routes/pagos.routes.js";
+
+dotenv.config();
+
+console.log('🎯 Puerto:', process.env.PORT);
+console.log('🔑 MP Token:', process.env.MP_ACCESS_TOKEN ? '✅ Cargado' : '❌ No cargado');
+
 const app = express();
-app.set('port', process.env.PORT || 4000); // Puerto configurable desde variable de entorno
+const PORT = process.env.PORT || 4001;
 
-// Iniciar servidor
-app.listen(app.get('port'), () => {
-    console.log('Estoy escuchando el puerto ' + app.get('port'));
+// Middlewares
+app.use(cors());
+app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Archivos estáticos
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use(express.static(path.join(__dirname, "/public")));
+
+// SDK de Mercado Pago
+import { MercadoPagoConfig, Preference } from "mercadopago";
+// Agrega credenciales
+const client = new MercadoPagoConfig({
+  accessToken: process.env.MP_ACCESS_TOKEN,
 });
 
-// 2- Configurar los middlewares
-app.use(cors()); // Permitir conexiones remotas con CORS
-app.use(morgan('dev')); // Mostrar detalles de cada petición en la terminal
-app.use(express.json()); // Permitir interpretar datos en formato JSON
-app.use(express.urlencoded({ extended: true })); // Permitir interpretar datos de formularios
+//Routes Ping
+app.get("/ping", (req, res) => {
+  res.send("Pong 🏓");
+});
 
-// Configurar archivos estáticos
-const __filename = fileURLToPath(import.meta.url); // Obtener la ruta del archivo actual
-const __dirname = path.dirname(__filename); // Obtener la carpeta del archivo
-app.use(express.static(path.join(__dirname, '/public'))); // Servir archivos estáticos desde 'public'
+// Route to create preference mp
+app.post("/create-preference", (req, res) => {
+  const preference = new Preference(client);
 
-//3- Crear las rutas
-app.use('/api', productoRouter)
-app.use('api/usuarios', usuarioRouter)
+  preference
+    .create({
+      body: {
+        items: [
+          {
+            title: "Mi producto",
+            quantity: 1,
+            unit_price: 2000,
+          },
+        ],
+      },
+    })
+    .then((data) =>{
+      console.log(data);
+      //Object data contains all information about our preference
+      res.status(200).json({
+        preference_id: data.id,
+        preference_url: data.init_point,
+      })
+    })
+    .catch(()=>{
+      res.status(500).json({ error: "Error creando la preferencia" });
+    });
+});
+
+// Rutas
+app.use("/api/productos", productoRouter);
+app.use("/api/usuarios", usuarioRouter);
+app.use("/api/pagos", pagoRouter);
+
+// Ruta de prueba
+app.get("/", (req, res) => {
+  res.send("Servidor de ChocoDevs Backend funcionando 🚀");
+});
+
+// Iniciar servidor
+app.listen(PORT, () => {
+  console.log(`Servidor escuchando en el puerto ${PORT}`);
+  console.log("Base de datos conectada");
+});
