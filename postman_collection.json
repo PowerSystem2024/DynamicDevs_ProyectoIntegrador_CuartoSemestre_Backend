@@ -1,0 +1,205 @@
+{
+  "info": {
+    "name": "ChocoDevs - Mercado Pago Integration",
+    "_postman_id": "chocodevs-mp-collection",
+    "description": "Colección de endpoints para probar la integración de Mercado Pago",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Autenticación",
+      "item": [
+        {
+          "name": "Registrar Usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"Test1234\",\n  \"nombreUsuario\": \"testuser\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/usuarios/registrar",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "usuarios", "registrar"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"Test1234\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/usuarios",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "usuarios"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Productos",
+      "item": [
+        {
+          "name": "Crear Producto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-token",
+                "value": "{{JWT_TOKEN}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreProducto\": \"Alfajor Triple de Chocolate\",\n  \"precio\": 450,\n  \"imagen\": \"https://example.com/alfajor.jpg\",\n  \"categoria\": \"Dulce\",\n  \"descripcion_breve\": \"Delicioso alfajor con tres capas de chocolate\",\n  \"descripcion_amplia\": \"Alfajor artesanal elaborado con chocolate importado de alta calidad, tres capas de dulce de leche y cubierta de chocolate amargo\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/productos",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "productos"]
+            }
+          }
+        },
+        {
+          "name": "Listar Productos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/api/productos",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "productos"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Mercado Pago",
+      "item": [
+        {
+          "name": "Crear Preferencia de Pago",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-token",
+                "value": "{{JWT_TOKEN}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productos\": [\n    {\n      \"id\": \"{{PRODUCTO_ID}}\",\n      \"cantidad\": 2\n    }\n  ],\n  \"usuario\": \"{{USUARIO_ID}}\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/pagos/crear-preferencia",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "pagos", "crear-preferencia"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Estado de Pedido",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-token",
+                "value": "{{JWT_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/pagos/pedido/{{PEDIDO_ID}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "pagos", "pedido", "{{PEDIDO_ID}}"]
+            }
+          }
+        },
+        {
+          "name": "Listar Pedidos de Usuario",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-token",
+                "value": "{{JWT_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/pagos/pedidos/usuario/{{USUARIO_ID}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "pagos", "pedidos", "usuario", "{{USUARIO_ID}}"]
+            }
+          }
+        },
+        {
+          "name": "Webhook (Simulación)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"payment\",\n  \"data\": {\n    \"id\": \"12345678\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/pagos/webhook",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "pagos", "webhook"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:4001"
+    },
+    {
+      "key": "JWT_TOKEN",
+      "value": "tu_token_aqui"
+    },
+    {
+      "key": "USUARIO_ID",
+      "value": "id_usuario_aqui"
+    },
+    {
+      "key": "PRODUCTO_ID",
+      "value": "id_producto_aqui"
+    },
+    {
+      "key": "PEDIDO_ID",
+      "value": "id_pedido_aqui"
+    }
+  ]
+}

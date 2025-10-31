@@ -6,6 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import productoRouter from './src/routes/productos.routes.js';
 import usuarioRouter from './src/routes/usuarios.routes.js';
+import pagosRouter from './src/routes/pagos.routes.js';
 
 // 1- Configurar un puerto
 const app = express();
@@ -29,4 +30,5 @@ app.use(express.static(path.join(__dirname, '/public'))); // Servir archivos est
 
 //3- Crear las rutas
 app.use('/api', productoRouter)
-app.use('api/usuarios', usuarioRouter)
+app.use('/api/usuarios', usuarioRouter)
+app.use('/api/pagos', pagosRouter)

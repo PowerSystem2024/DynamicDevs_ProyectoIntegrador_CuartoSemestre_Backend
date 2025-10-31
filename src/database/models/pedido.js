@@ -4,7 +4,7 @@ const pedidoSchema = new Schema({
   usuario: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "usuario",
-    required: true
+    required: false // Puede ser null para compras sin registro
   },
   productos: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -22,13 +22,21 @@ const pedidoSchema = new Schema({
   },
   metodoPago: {
     type: String,
-    enum: ['TARJETA_CREDITO', 'TARJETA_DEBITO', 'EFECTIVO', 'BILLETERA_VIRTUAL'],
-    required: true
+    enum: ['TARJETA_CREDITO', 'TARJETA_DEBITO', 'EFECTIVO', 'BILLETERA_VIRTUAL', 'PENDIENTE', 'MERCADOPAGO'],
+    default: 'PENDIENTE'
   },
   estado: {
     type: String,
-    enum: ['PENDIENTE', 'PAGADO', 'CANCELADO'],
+    enum: ['PENDIENTE', 'PAGADO', 'CANCELADO', 'FALLIDO'],
     default: 'PENDIENTE'
+  },
+  mercadoPagoId: {
+    type: String,
+    required: false
+  },
+  preferenceId: {
+    type: String,
+    required: false
   }
 });
 
