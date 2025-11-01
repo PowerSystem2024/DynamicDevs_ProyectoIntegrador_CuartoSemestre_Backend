@@ -2,6 +2,7 @@ import { Preference } from 'mercadopago';
 import client from '../config/mercadopago.js';
 import Pedido from '../database/models/pedido.js';
 import Producto from '../database/models/producto.js';
+import { randomUUID } from 'crypto';
 
 // Crear una preferencia de pago
 export const crearPreferencia = async (req, res) => {
@@ -87,7 +88,16 @@ export const crearPreferencia = async (req, res) => {
 
     console.log('Datos de preferencia:', JSON.stringify(preferenceData, null, 2));
 
-    const result = await preference.create({ body: preferenceData });
+    // Generar un idempotencyKey único para esta operación
+    const idempotencyKey = randomUUID();
+    console.log('IdempotencyKey generado:', idempotencyKey);
+
+    const result = await preference.create({ 
+      body: preferenceData,
+      requestOptions: {
+        idempotencyKey: idempotencyKey
+      }
+    });
 
     console.log('Preferencia creada exitosamente:', result.id);
 
