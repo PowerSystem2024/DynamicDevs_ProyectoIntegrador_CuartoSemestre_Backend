@@ -149,14 +149,28 @@ El proyecto abarca **frontend y backend**, cubriendo todo el flujo de compra y g
 - Responsable de **planificación, estructura, desarrollo e integración técnica** del proyecto.  
 - Especializado en **React, Node.js y MongoDB**, con foco en **rendimiento, calidad y seguridad**.  
 
-### 🤝 Equipo de desarrollo
+## 👨‍💻 Equipo de desarrollo
 
-**DynamicDevs** – Grupo colaborativo enfocado en metodologías ágiles y desarrollo full stack.  
+| Rol | Nombre | GitHub | LinkedIn |
+|-----|--------|--------|----------|
+| Líder Técnico Backend | Diaz Cristian Ivan | <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="16"/> [GitHub](https://github.com/cristiandcode) | <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="16"/> [LinkedIn](https://www.linkedin.com/in/cristiandcode/) |
+| Desarrollador | Cortez Hector | <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="16"/> [GitHub](https://github.com/CoraYako) | <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="16"/> [LinkedIn](https://www.linkedin.com/in/hector-cortez-cy/) |
+| Desarrollador | Leytes Rodrigo | <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="16"/> [GitHub](https://github.com/Roddri19) | <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="16"/> [LinkedIn](https://www.linkedin.com/in/rodrigoleytes/) |
+| Desarrollador | Gimenez Miqueas | <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="16"/> [GitHub](https://github.com/miquigz) | <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="16"/> [LinkedIn](https://www.linkedin.com/in/miqueasgimenez/) |
+| Desarrollador | Paz Ezequiel | <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="16"/> [GitHub]() | <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="16"/> [LinkedIn]() |
+| Desarrollador | Diaz Federico | <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="16"/> [GitHub]() | <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="16"/> [LinkedIn]() |
+| Desarrollador | Vignati Mauro | <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="16"/> [GitHub]() | <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="16"/> [LinkedIn]() |
 
-| Rol | Nombre | GitHub |
-|-----|--------|--------|
-| Líder Técnico | Cristian Díaz | [GitHub](https://github.com/cristiandcode) |
-| Programadores | Jose Villalba, Rodrigo Leyes, Noelia Cruz, Pablo Mateos, Matias Gomez | [GitHub respectivos] |
+---
+
+
+### 👨‍💻 Líder y responsable del proyecto
+
+**Diaz Cristian Ivan**  
+*Líder Técnico Backend y Frontend – Arquitecto del proyecto*  
+
+Desarrollador y arquitecto principal del proyecto, responsable de la planificación, estructura, desarrollo e integración técnica de todo el sistema, tanto en **Frontend (React, Vite, Bootstrap)** como en **Backend (Node.js, Express, MongoDB / Mongo Atlas)**.  
+Básicamente, el ideador de toda la arquitectura y flujo del proyecto.
 
 ### 📫 Contacto
 
