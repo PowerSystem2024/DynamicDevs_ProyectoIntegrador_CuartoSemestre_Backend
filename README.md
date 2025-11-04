@@ -170,7 +170,7 @@ El proyecto abarca **frontend y backend**, cubriendo todo el flujo de compra y g
 *Líder Técnico Backend y Frontend – Arquitecto del proyecto*  
 
 Desarrollador y arquitecto principal del proyecto, responsable de la planificación, estructura, desarrollo e integración técnica de todo el sistema, tanto en **Frontend (React, Vite, Bootstrap)** como en **Backend (Node.js, Express, MongoDB / Mongo Atlas)**.  
-Básicamente, el ideador de toda la arquitectura y flujo del proyecto.
+Ideador de toda la arquitectura y flujo del proyecto.
 
 ### 📫 Contacto
 
