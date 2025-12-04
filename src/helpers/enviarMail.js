@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Genera detalle de productos
+// Generador detalle de productos
 const generarDetalleProductos = (items) => {
   if (!items || items.length === 0) return "No hay productos.";
   return items
@@ -19,35 +19,82 @@ const generarDetalleProductos = (items) => {
     .join("\n");
 };
 
+// Validar horario permitido
+const validarHorario = (horario) => {
+  const [h, m] = horario.split(":").map(Number);
+  if (!h && h !== 0) return false;
+
+  const minutos = h * 60 + m;
+
+  const rango1 = [8 * 60, 13 * 60];   // 08:00 a 13:00
+  const rango2 = [17 * 60, 21 * 60];  // 17:00 a 21:00
+
+  const dentroRango1 = minutos >= rango1[0] && minutos <= rango1[1];
+  const dentroRango2 = minutos >= rango2[0] && minutos <= rango2[1];
+
+  return dentroRango1 || dentroRango2;
+};
+
 /**
- * Función para enviar mails
- * @param {Object} options
- * @param {string} options.subject - Asunto
- * @param {Array} [options.items] - Array de productos
- * @param {string} [options.metodoPago] - 'EFECTIVO' o 'MP'
- * @param {string} [options.text] - Texto adicional opcional
- * @param {string} [options.html] - HTML opcional
+ * Enviar mail
  */
-export const enviarMail = async ({ subject, items, metodoPago, text, html }) => {
+export const enviarMail = async ({
+  subject,
+  items,
+  metodoPago,
+  nombreCliente,
+  notaCliente,
+  horarioRetiro,
+  nombreRetira,
+  fechaRetira,
+  horaRetira,
+  text,
+  html
+}) => {
+
   try {
     let cuerpo = "";
 
-    // Mensaje según método de pago
-    if (metodoPago === "EFECTIVO") {
-      cuerpo += "Paga en el local con efectivo.\n\n";
-    } else if (metodoPago === "MP") {
-      cuerpo += "Pedido PAGADO ✅\n\n";
+    // Validar horario
+    if ((horarioRetiro || horaRetira) && !validarHorario(horarioRetiro || horaRetira)) {
+      cuerpo += "⚠️ *Horario fuera de rango permitido*\nHorarios válidos: 08:00–13:00 / 17:00–21:00\n\n";
     }
 
-    // Agregar detalle de productos si hay items
+    // Método de pago
+    if (metodoPago === "EFECTIVO") {
+      cuerpo += "💵 Pagará en el local con efectivo.\n\n";
+    } else if (metodoPago === "MP") {
+      cuerpo += "Pedido PAGADO con Mercado Pago ✅\n\n";
+    }
+
+    // Nombre del cliente
+    if (nombreCliente || nombreRetira) {
+      cuerpo += `👤 Cliente: ${nombreCliente || nombreRetira}\n\n`;
+    }
+
+    // Fecha y hora de retiro
+    if (fechaRetira) {
+      cuerpo += `📅 Fecha de retiro: ${fechaRetira}\n`;
+    }
+    if (horaRetira || horarioRetiro) {
+      cuerpo += `🕒 Hora de retiro: ${horaRetira || horarioRetiro}\n\n`;
+    }
+
+    // Productos
     if (items) {
       const detalle = generarDetalleProductos(items);
-      cuerpo += `Productos:\n${detalle}\n`;
       const total = items.reduce((acc, i) => acc + i.precio * i.cantidad, 0);
-      cuerpo = `Total: $${total}\n\n${cuerpo}`;
+
+      cuerpo += `Total: $${total}\n\n`;
+      cuerpo += `🛒 Productos:\n${detalle}\n\n`;
     }
 
-    // Agregar texto adicional si se pasó
+    // Nota o reseña del cliente
+    if (notaCliente) {
+      cuerpo += `📝 Nota del cliente:\n"${notaCliente}"\n\n`;
+    }
+
+  
     if (text) {
       cuerpo += `\n${text}`;
     }
@@ -62,8 +109,8 @@ export const enviarMail = async ({ subject, items, metodoPago, text, html }) => 
 
     const info = await transporter.sendMail(mailOptions);
     console.log("✅ Mail enviado:", info.response);
+
   } catch (error) {
     console.error("❌ Error al enviar mail:", error);
   }
 };
-

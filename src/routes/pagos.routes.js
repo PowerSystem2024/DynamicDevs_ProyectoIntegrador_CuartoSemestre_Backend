@@ -1,10 +1,14 @@
 import { Router } from "express";
-import { createPreference, registrarPedidoEfectivo } from "../controllers/pagos.controllers.js";
+import { 
+  createPreference, 
+  registrarPedidoEfectivo,
+  registrarPedidoMercadoPago
+} from "../controllers/pagos.controllers.js";
 
 const router = Router();
 
-// Endpoint para crear preferencia
 router.post("/create-preference", createPreference);
-router.post("/pedido-efectivo", registrarPedidoEfectivo)
+router.post("/pedido-efectivo", registrarPedidoEfectivo);
+router.post("/pedido-mp", registrarPedidoMercadoPago);
 
 export default router;

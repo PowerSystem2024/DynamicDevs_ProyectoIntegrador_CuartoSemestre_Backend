@@ -27,6 +27,21 @@ const pedidoSchema = new Schema({
     enum: ['PENDIENTE_RETIRO', 'COMPLETADO', 'CANCELADO'],
     default: 'PENDIENTE_RETIRO'
   },
+
+
+  nombreRetira: {
+    type: String,
+    required: true
+  },
+  fechaRetira: {
+    type: String,   // formato "2025-12-05"
+    required: true
+  },
+  horaRetira: {
+    type: String,   // formato "15:30"
+    required: true
+  },
+
   fechaCreacion: {
     type: Date,
     default: Date.now

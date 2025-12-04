@@ -13,6 +13,16 @@ export const createPreference = async (req, res) => {
     
     const { items } = req.body;
 
+    // 🔹 Extraemos datos del retiro enviados desde el frontend
+    const { nombreRetira, fechaRetira, horaRetira } = req.body;
+
+    // 🔹 Validamos datos del retiro
+    if (!nombreRetira || !fechaRetira || !horaRetira) {
+      return res.status(400).json({
+        error: "Debe indicar nombre, fecha y horario de retiro"
+      });
+    }
+
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ error: "El carrito está vacío o es inválido" });
     }
@@ -27,11 +37,11 @@ export const createPreference = async (req, res) => {
           unit_price: Number(item.precio || item.unit_price),
           currency_id: "ARS",
         })),
-                back_urls: {
-            success: "https://chocodevs.netlify.app/success",
-            failure: "https://chocodevs.netlify.app/failure",
-            pending: "https://chocodevs.netlify.app/pending",
-          },
+        back_urls: {
+          success: "https://chocodevs.netlify.app/success",
+          failure: "https://chocodevs.netlify.app/failure",
+          pending: "https://chocodevs.netlify.app/pending",
+        },
         payment_methods: {
           excluded_payment_types: [],
           installments: 12,
@@ -41,12 +51,14 @@ export const createPreference = async (req, res) => {
 
     console.log("✅ Preferencia creada exitosamente. ID:", response.id);
 
-    // ✅ Enviar mail con detalle de productos
     try {
       await enviarMail({
         subject: 'Nueva compra con Mercado Pago',
         items,
-        metodoPago: 'MP'
+        metodoPago: 'MP',
+        nombreRetira,
+        fechaRetira,
+        horaRetira
       });
     } catch (err) {
       console.error('❌ Error enviando mail de Mercado Pago:', err.message);
@@ -65,9 +77,10 @@ export const createPreference = async (req, res) => {
   }
 };
 
+
 export const registrarPedidoEfectivo = async (req, res) => {
   try {
-    const { items, total } = req.body;
+    const { items, total, nombreRetira, fechaRetira, horaRetira } = req.body;
 
     if (!items || items.length === 0) {
       return res.status(400).json({ 
@@ -75,24 +88,35 @@ export const registrarPedidoEfectivo = async (req, res) => {
       });
     }
 
+    if (!nombreRetira || !fechaRetira || !horaRetira) {
+      return res.status(400).json({
+        mensaje: 'Debe indicar nombre, fecha y horario de retiro'
+      });
+    }
+
     const nuevoPedido = new Pedido({
       usuario: null,
       productos: items.map(item => item._id),
-      total: total,
+      total,
       metodoPago: 'EFECTIVO',
-      estado: 'PENDIENTE_RETIRO'
+      estado: 'PENDIENTE_RETIRO',
+      nombreRetira,
+      fechaRetira,
+      horaRetira
     });
 
     await nuevoPedido.save();
 
     console.log('✅ Pedido en efectivo registrado:', nuevoPedido._id);
 
-    // ✅ Enviar mail con detalle de productos
     try {
       await enviarMail({
         subject: 'Nuevo pedido para retirar en local',
         items,
-        metodoPago: 'EFECTIVO'
+        metodoPago: 'EFECTIVO',
+        nombreRetira,
+        fechaRetira,
+        horaRetira
       });
     } catch (err) {
       console.error('❌ Error enviando mail de pedido en efectivo:', err.message);
@@ -109,6 +133,70 @@ export const registrarPedidoEfectivo = async (req, res) => {
     res.status(500).json({ 
       mensaje: 'Error al registrar el pedido',
       error: error.message 
+    });
+  }
+};
+
+export const registrarPedidoMercadoPago = async (req, res) => {
+  try {
+    const { items, total, nombreRetira, fechaRetira, horaRetira, paymentId, status } = req.body;
+
+    if (!items || items.length === 0) {
+      return res.status(400).json({ mensaje: 'Debe enviar al menos un producto' });
+    }
+
+    if (!nombreRetira || !fechaRetira || !horaRetira) {
+      return res.status(400).json({
+        mensaje: 'Debe indicar nombre, fecha y horario de retiro'
+      });
+    }
+
+    if (!paymentId) {
+      return res.status(400).json({
+        mensaje: 'Debe indicar el ID de pago de Mercado Pago'
+      });
+    }
+
+    const nuevoPedido = new Pedido({
+      usuario: null,
+      productos: items.map(item => item._id),
+      total,
+      metodoPago: 'MERCADO_PAGO',
+      estado: status === "approved" ? "PENDIENTE_RETIRO" : "PENDIENTE_PAGO",
+      nombreRetira,
+      fechaRetira,
+      horaRetira,
+      paymentId
+    });
+
+    await nuevoPedido.save();
+
+    console.log("✅ Pedido MP guardado en DB:", nuevoPedido._id);
+
+    try {
+      await enviarMail({
+        subject: "Nueva compra con Mercado Pago",
+        items,
+        metodoPago: "MERCADO_PAGO",
+        nombreRetira,
+        fechaRetira,
+        horaRetira
+      });
+    } catch (error) {
+      console.error("❌ Error enviando mail:", error.message);
+    }
+
+    res.status(201).json({
+      mensaje: "Pedido registrado exitosamente",
+      orderId: nuevoPedido._id,
+      metodoPago: "MERCADO_PAGO"
+    });
+
+  } catch (error) {
+    console.error("❌ Error registrando pedido MP:", error);
+    res.status(500).json({
+      mensaje: "Error al registrar el pedido",
+      error: error.message
     });
   }
 };
